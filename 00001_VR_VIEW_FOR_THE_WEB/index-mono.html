@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>00001_VR_VIEW_FOR_THE_WEB</title>
+    <script src="//storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
+    <script>
+        //        http://ow4ffxtt1.bkt.clouddn.com/mono-360-1.jpg
+        //        http://ow4ffxtt1.bkt.clouddn.com/mono-360-2.jpg
+        //        http://ow4ffxtt1.bkt.clouddn.com/mono-360-3.jpg
+        window.addEventListener('load', onVrViewLoad)
+        function onVrViewLoad() {
+            var vrView = new VRView.Player('#vrview', {
+                width: '100%',
+                height: '500',
+                image: 'http://ow4ffxtt1.bkt.clouddn.com/mono-360-1.jpg',
+                is_stereo: false
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="vrview"></div>
+</body>
+</html>

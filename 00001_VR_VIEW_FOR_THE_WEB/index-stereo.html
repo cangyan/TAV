@@ -5,13 +5,14 @@
     <title>00001_VR_VIEW_FOR_THE_WEB</title>
     <script src="//storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
     <script>
+
         window.addEventListener('load', onVrViewLoad)
         function onVrViewLoad() {
             var vrView = new VRView.Player('#vrview', {
                 width: '100%',
-                height: '300',
-                preview: '//storage.googleapis.com/vrview/examples/coral-preview.jpg',
-                image: '//storage.googleapis.com/vrview/examples/coral.jpg',
+                height: '500',
+                preview: 'http://ow4ffxtt1.bkt.clouddn.com/andes_512.jpg',
+                image: 'http://ow4ffxtt1.bkt.clouddn.com/andes_2048.jpg',
                 is_stereo: true
             });
         }
