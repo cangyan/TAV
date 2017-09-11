@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>00001_VR_VIEW_FOR_THE_WEB</title>
+    <script src="//storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
+    <script>
+        window.addEventListener('load', onVrViewLoad)
+        function onVrViewLoad() {
+            var vrView = new VRView.Player('#vrview', {
+                width: '100%',
+                height: '300',
+                preview: '//storage.googleapis.com/vrview/examples/coral-preview.jpg',
+                image: '//storage.googleapis.com/vrview/examples/coral.jpg',
+                is_stereo: true
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="vrview"></div>
+</body>
+</html>
