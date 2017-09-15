@@ -1,8 +1,7 @@
 <?php
 function check($arr)
 {
-    asort($arr);
-    $arr = array_values($arr);
+    sort($arr);
     $arr[0] += 1;
     return array_reduce($arr, function ($carry, $item) {
         $carry *= $item;
