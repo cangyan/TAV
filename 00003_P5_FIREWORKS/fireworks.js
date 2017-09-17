@@ -1,7 +1,7 @@
 var fireworks = [];
 
 function setup() {
-    createCanvas(window.innerWidth, window.innerHeight, WEBGL);
+    createCanvas(window.innerWidth, window.innerHeight);
     frameRate(50);
     imageMode(CENTER);
 }
@@ -35,19 +35,19 @@ function createLight(rPower, gPower, bPower) {
             var r = int((255 * rPower) / distance);
             var g = int((255 * gPower) / distance);
             var b = int((255 * bPower) / distance);
-            img.pixels[x + y * side] = color(r, g, b);
+            // img.pixels[x + y * side] = color(r, g, b);
+            img.set(y, x, color(r, g, b));
         }
     }
 
     img.updatePixels();
-
     return img;
 }
 
 function Fireworks(radius) {
-    var num = 512;
+    var num = 32;
 
-    var centerPosition = new p5.Vector(random(-width * 4 / 8, width * 4 / 8), random(height / 2, height * 4 / 5), random(-100, 100));
+    var centerPosition = new p5.Vector(random(width / 8, width * 7 / 8), random(height / 2, height * 4 / 5), random(-100, 100));
     console.log(centerPosition);
     var velocity = new p5.Vector(0, -22, 0);
     var accel = new p5.Vector(0, 0.4, 0);
@@ -69,7 +69,15 @@ function Fireworks(radius) {
         firePosition[i] = p5.Vector.mult(firePosition[i], 1.12);
     }
 
-    img = createLight(0.9, random(0.2, 0.5), random(0.2, 0.5));
+    if(colorChange>=3.8){
+        img=createLight(0.9,random(0.2,0.5),random(0.2,0.5));
+    }else if(colorChange>3.2){
+        img=createLight(random(0.2,0.5),0.9,random(0.2,0.5));
+    }else if(colorChange>2){
+        img=createLight(random(0.2,0.5),random(0.2,0.5),0.9);
+    } else {
+        img=createLight(random(0.5,0.8),random(0.5,0.8),random(0.5,0.8));
+    }
 
 
     this.display = function () {
@@ -77,7 +85,7 @@ function Fireworks(radius) {
             push();
             translate(centerPosition.x, centerPosition.y, centerPosition.z);
             translate(firePosition[i].x, firePosition[i].y, firePosition[i].z);
-            box(32,32,32, 0, 0);
+            image(img, 0, 0);
             pop();
 
             firePosition[i] = p5.Vector.mult(firePosition[i], 1.015);
