@@ -14,13 +14,11 @@ function draw() {
         if (fireworks[i].needRemove()) {
             fireworks.splice(i, 1);
         }
-
-        console.log(fireworks.length);
     }
 }
 
 function keyPressed() {
-    fireworks.push(new Fireworks());
+    fireworks.push(new Fireworks(80));
 }
 
 function createLight(rPower, gPower, bPower) {
@@ -45,10 +43,9 @@ function createLight(rPower, gPower, bPower) {
 }
 
 function Fireworks(radius) {
-    var num = 32;
+    var num = 512;
 
     var centerPosition = new p5.Vector(random(width / 8, width * 7 / 8), random(height / 2, height * 4 / 5), random(-100, 100));
-    console.log(centerPosition);
     var velocity = new p5.Vector(0, -22, 0);
     var accel = new p5.Vector(0, 0.4, 0);
 
@@ -85,6 +82,7 @@ function Fireworks(radius) {
             push();
             translate(centerPosition.x, centerPosition.y, centerPosition.z);
             translate(firePosition[i].x, firePosition[i].y, firePosition[i].z);
+            blendMode(ADD);
             image(img, 0, 0);
             pop();
 
