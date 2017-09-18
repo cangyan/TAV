@@ -21,6 +21,11 @@ function keyPressed() {
     fireworks.push(new Fireworks(80));
 }
 
+function touchStarted() {
+    fireworks.push(new Fireworks(80));
+    return false;
+}
+
 function createLight(rPower, gPower, bPower) {
     var side = 64;
     var center = side / 2.0;
