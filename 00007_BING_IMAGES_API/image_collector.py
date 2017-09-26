@@ -10,12 +10,12 @@ import urllib
 import hashlib
 import sha3
 import configparser
+import argparse
+import io
 
 def make_dir(path):
     if not os.path.isdir(path):
         os.mkdir(path)
-
-
 
 def make_correspondence_table(correspondence_table, original_url, hashed_url):
     """Create reference table of hash value and original URL.
@@ -62,22 +62,64 @@ def download_image(url, timeout=10):
 
     return response.content
 
-def save_images(filename, image):
+def save_images(filename, image, url):
     with open(filename, "wb") as fout:
         fout.write(image)
+        fout.flush()
+        fout.close()
 
+    print('saved image ... {}'.format(url))
+
+def argsCheck(parser):
+    parser.add_argument(
+        '--image_count',
+        type=int,
+        default=3,
+        help='collection number of image files per api call'
+    )
+
+    parser.add_argument(
+        '--off_set_start',
+        type=int,
+        default=0,
+        help='offset start'
+    )
+
+    parser.add_argument(
+        '--call_count',
+        type=int,
+        default=2,
+        help='number of api calls'
+    )
+
+    parser.add_argument(
+        '--output_path',
+        type=str,
+        default='~/sandbox',
+        help='image files output directory'
+    )
+
+    parser.add_argument(
+        '--query',
+        type=str,
+        default='cat',
+        help='search query'
+    )
 
 if __name__=='__main__':
+    parser = argparse.ArgumentParser()
+    argsCheck(parser)
+    FLAGS, unparsed = parser.parse_known_args()
     config = configparser.ConfigParser()
     config.read('authentication.ini')
     bing_api_key = config['auth']['bing_api_key']
 
-    save_dir_path = '/home/huuinn/sandbox'
+    save_dir_path = FLAGS.output_path
     make_dir(save_dir_path)
 
 
-    num_imgs_required = 10
-    num_imgs_per_transaction = 5
+    num_imgs_required = FLAGS.call_count * FLAGS.image_count
+    num_imgs_per_transaction = FLAGS.image_count
     offset_count = math.floor(num_imgs_required / num_imgs_per_transaction)
 
     url_list = []
@@ -90,10 +132,10 @@ if __name__=='__main__':
 
     for offset in range(offset_count):
         params = urllib.parse.urlencode({
-            'q': 'cat',
+            'q': FLAGS.query,
             'mkt': 'cn-zh',
             'count': num_imgs_per_transaction,
-            'offset': offset * num_imgs_per_transaction,
+            'offset': offset * num_imgs_per_transaction + FLAGS.off_set_start,
             'safeSearch': 'Moderate'
         })
 
@@ -130,8 +172,7 @@ if __name__=='__main__':
         try:
             img_path = make_img_path(save_dir_path, url)
             image = download_image(url)
-            save_images(img_path, image)
-            print('saved image ... {}'.format(url))
+            save_images(img_path, image, url)
 
         except KeyboardInterrupt:
             break
