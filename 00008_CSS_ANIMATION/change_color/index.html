@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #box{
+            width:100px;
+            height:100px;
+            background-color:blue;
+            animation-name: anime; /*　分配动画名 */
+            animation-duration: 3s; /* 动画执行时间 */
+        }
+
+        /* 动画 */
+        @keyframes anime
+        {
+            100% {
+                background-color:red;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div id="box"></div>
+</body>
+</html>
