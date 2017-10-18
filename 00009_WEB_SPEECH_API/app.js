@@ -3,7 +3,7 @@ var content = document.getElementById('content');
 
 var speech = new webkitSpeechRecognition();
 
-speech.lang = "ch";
+speech.lang = "zh";
 
 btn.addEventListener('click', function() {
     speech.start();
