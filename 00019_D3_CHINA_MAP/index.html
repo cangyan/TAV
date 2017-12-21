@@ -3,47 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>中国地图</title>
-    <svg width="1920" height="1080" fill="none" stroke-linejoin="round" stroke-linecap="round"></svg>
+
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
 </head>
 <body>
+<svg width="1920" height="1080" fill="none" stroke-linejoin="round" stroke-linecap="round"></svg>
 <script>
 
     var svg = d3.select("svg");
 
     var projection = d3.geoMercator()
-            .center([107, 31])
-            .scale(800)
-            .translate([svg.style('width').replace("px", "")/2, svg.style('height').replace("px", "")/2]);
+        .center([107, 31])
+        .scale(800)
+        .translate([svg.style('width').replace("px", "") / 2, svg.style('height').replace("px", "") / 2]);
 
     var path = d3.geoPath()
-            .projection(projection);
+        .projection(projection);
 
-    d3.json("./china.geojson", function(error, root) {
+    d3.json("./china.geojson", function (error, root) {
 
         if (error)
             return console.error(error);
 //        console.log(root.features);
 
         svg.selectAll("path")
-                .data( root.features )
-                .enter()
-                .append("path")
-                .attr("stroke","#000")
-                .attr("stroke-width",1)
-                .attr("fill", function(d,i){
-                    return d3.color(i);
-                })
-                .attr("d", path )   //経路を生成
-                .on("mouseover",function(d,i){
-                    d3.select(this)
-                            .attr("fill","yellow");
-                })
-                .on("mouseout",function(d,i){
-                    d3.select(this)
-                            .attr("fill",d3.color(i));
-                });
+            .data(root.features)
+            .enter()
+            .append("path")
+            .attr("stroke", "#000")
+            .attr("stroke-width", 1)
+            .attr("fill", function (d, i) {
+                return d3.color(i);
+            })
+            .attr("d", path)   //経路を生成
+            .on("mouseover", function (d, i) {
+                d3.select(this)
+                    .attr("fill", "yellow");
+            })
+            .on("mouseout", function (d, i) {
+                d3.select(this)
+                    .attr("fill", d3.color(i));
+            });
     });
 </script>
 </body>
