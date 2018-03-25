@@ -3,7 +3,7 @@ $pdo = new PDO('mysql:host=127.0.0.1;dbname=hoge_db;port=33062', 'root', 'pass')
 
 // 性能检测脚本
 function profile($text, $f) {
-    $testCount = 5000; // 試行回数
+    $testCount = 5000;
     $totalTime = .0;
     for($i = 0; $i < $testCount; ++$i){
         $start = microtime(true);
