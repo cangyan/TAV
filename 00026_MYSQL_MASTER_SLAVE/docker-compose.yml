@@ -1,0 +1,22 @@
+version: '2'
+services:
+    database-master:
+        build:
+            context: ./
+            dockerfile: deploy/master.docker
+        environment:
+            - "MYSQL_ROOT_PASSWORD=pass"
+            - "MYSQL_DATABASE=test_db"
+        links:
+            - database-slave
+        ports:
+            - "33065:3306"
+    database-slave:
+        build:
+            context: ./
+            dockerfile: deploy/slave.docker
+        environment:
+            - "MYSQL_ROOT_PASSWORD=pass"
+            - "MYSQL_DATABASE=test_db"
+        ports:
+            - "33066:3306"
