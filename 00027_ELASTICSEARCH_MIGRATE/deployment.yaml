@@ -1,0 +1,141 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-com
+  labels:
+    name: test-com
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: test-com
+  name: es-source-vol
+  labels:
+    component: es
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: test-com
+  name: es-target-vol
+  labels:
+    component: es
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: test-com
+  name: es-source
+  labels:
+    component: es
+spec:
+  type: NodePort
+  ports:
+    - port: 9200
+      name: data-port
+    - port: 9300
+      name: admin-port
+  selector:
+    component: es
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: test-com
+  name: es-source
+  labels:
+    component: es
+spec:
+  selector:
+    matchLabels:
+      component: es
+  template:
+    metadata:
+      labels:
+        component: es
+    spec:
+      containers:
+        - name:  es-source
+          image: elasticsearch:5.6.12-alpine
+          env:
+            - name: ES_JAVA_OPTS
+              value: "-Xmx256m -Xms256m"
+          ports:
+            - containerPort: 9200
+            - containerPort: 9300
+          resources:
+            {}
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: es-source-vol
+      restartPolicy: Always
+      volumes:
+        - name: es-source-vol
+          persistentVolumeClaim:
+            claimName: es-source-vol
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: test-com
+  name: es-target
+  labels:
+    component: es
+spec:
+  type: NodePort
+  ports:
+    - port: 9200
+      name: data-port
+    - port: 9300
+      name: admin-port
+  selector:
+    component: es
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: test-com
+  name: es-target
+  labels:
+    component: es
+spec:
+  selector:
+    matchLabels:
+      component: es
+  template:
+    metadata:
+      labels:
+        component: es
+    spec:
+      containers:
+        - name:  es-target
+          image: elasticsearch:5.6.12-alpine
+          env:
+            - name: ES_JAVA_OPTS
+              value: "-Xmx256m -Xms256m"
+          ports:
+            - containerPort: 9200
+            - containerPort: 9300
+          resources:
+            {}
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: es-target-vol
+      restartPolicy: Always
+      volumes:
+        - name: es-target-vol
+          persistentVolumeClaim:
+            claimName: es-target-vol
